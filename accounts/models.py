@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +9,8 @@ class Library(models.Model):
     Modèle représentant une médiathèque/bibliothèque.
     Peut faire partie d'un réseau de lecture publique.
     """
+
+    objects = models.Manager()
 
     name = models.CharField(_("Nom"), max_length=200)
     code = models.CharField(
@@ -49,6 +51,8 @@ class User(AbstractUser):
     Modèle utilisateur personnalisé pour MediaBib.
     Gère trois types d'utilisateurs : superadmin, library (personnel), reader (lecteur).
     """
+
+    objects = UserManager()
 
     class UserType(models.TextChoices):
         SUPERADMIN = "superadmin", _("Super administrateur")
@@ -108,6 +112,8 @@ class ReaderProfile(models.Model):
     Profil détaillé du lecteur (informations de carte, données personnelles).
     Conforme aux exigences RGPD avec consentement explicite.
     """
+
+    objects = models.Manager()
 
     user = models.OneToOneField(
         User,

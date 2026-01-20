@@ -68,7 +68,7 @@ repos:
         additional_dependencies:
           - django-stubs
           - djangorestframework-stubs
-        args: ['--ignore-missing-imports']
+        args: ['--ignore-missing-imports', '.']
         pass_filenames: false
 
   # Security checks with bandit
