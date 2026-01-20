@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Inscription réussie" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Inscription réussie !" %}</h1>
+
+<p>{% trans "Votre compte lecteur a été créé avec succès." %}</p>
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p><strong>{{ message }}</strong></p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<section>
+    <h2>{% trans "Prochaines étapes" %}</h2>
+    <ol>
+        <li>{% trans "Connectez-vous avec vos identifiants" %}</li>
+        <li>{% trans "Rendez-vous à votre médiathèque pour activer votre carte" %}</li>
+        <li>{% trans "Commencez à emprunter des documents !" %}</li>
+    </ol>
+</section>
+
+<nav>
+    <a href="{% url 'accounts:login' %}">{% trans "Se connecter" %}</a>
+    | <a href="{% url 'home:index' %}">{% trans "Retour à l'accueil" %}</a>
+</nav>
+{% endblock %}

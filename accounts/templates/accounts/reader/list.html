@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Lecteurs" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Gestion des lecteurs" %}</h1>
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<nav>
+    <a href="{% url 'accounts:reader_create' %}">{% trans "Créer un lecteur" %}</a>
+    | <a href="{% url 'accounts:profile' %}">{% trans "Mon profil" %}</a>
+</nav>
+
+<form method="get">
+    <input type="text" name="search" value="{{ search }}" placeholder="{% trans 'Rechercher par nom ou numéro de carte' %}">
+    <button type="submit">{% trans "Rechercher" %}</button>
+    {% if search %}<a href="{% url 'accounts:reader_list' %}">{% trans "Effacer" %}</a>{% endif %}
+</form>
+
+{% if readers %}
+<table>
+    <thead>
+        <tr>
+            <th>{% trans "Carte" %}</th>
+            <th>{% trans "Nom" %}</th>
+            <th>{% trans "Catégorie" %}</th>
+            <th>{% trans "Médiathèque" %}</th>
+            <th>{% trans "Statut" %}</th>
+            <th>{% trans "Actions" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reader in readers %}
+        <tr>
+            <td>{{ reader.card_number }}</td>
+            <td><a href="{% url 'accounts:reader_detail' reader.pk %}">{{ reader.user.get_full_name|default:reader.user.username }}</a></td>
+            <td>{{ reader.get_category_display }}</td>
+            <td>{{ reader.user.library.name|default:"-" }}</td>
+            <td>
+                {% if reader.is_blocked %}{% trans "Bloqué" %}
+                {% elif not reader.is_active %}{% trans "Inactif" %}
+                {% else %}{% trans "Actif" %}{% endif %}
+            </td>
+            <td>
+                <a href="{% url 'accounts:reader_update' reader.pk %}">{% trans "Modifier" %}</a>
+                | <a href="{% url 'accounts:reader_password_reset' reader.pk %}">{% trans "Mot de passe" %}</a>
+                | <a href="{% url 'accounts:reader_delete' reader.pk %}">{% trans "Supprimer" %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">{% trans "Précédent" %}</a>
+    {% endif %}
+    <span>{% trans "Page" %} {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}">{% trans "Suivant" %}</a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p>{% trans "Aucun lecteur trouvé." %}</p>
+{% endif %}
+{% endblock %}

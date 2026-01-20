@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Modifier" %} {{ library.name }} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Modifier la médiathèque" %}: {{ library.name }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+        {% if field.errors %}<span>{{ field.errors.0 }}</span>{% endif %}
+    </div>
+    {% endfor %}
+
+    <div>
+        <button type="submit">{% trans "Enregistrer" %}</button>
+        <a href="{% url 'accounts:library_detail' library.pk %}">{% trans "Annuler" %}</a>
+    </div>
+</form>
+{% endblock %}

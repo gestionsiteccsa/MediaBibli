@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ library.name }} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{{ library.name }}</h1>
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<section>
+    <h2>{% trans "Informations générales" %}</h2>
+    <dl>
+        <dt>{% trans "Code" %}</dt>
+        <dd>{{ library.code }}</dd>
+
+        <dt>{% trans "Statut" %}</dt>
+        <dd>{% if library.is_active %}{% trans "Active" %}{% else %}{% trans "Inactive" %}{% endif %}</dd>
+
+        <dt>{% trans "Adresse" %}</dt>
+        <dd>{{ library.address|default:"-" }}<br>{{ library.postal_code }} {{ library.city }}</dd>
+
+        <dt>{% trans "Téléphone" %}</dt>
+        <dd>{{ library.phone|default:"-" }}</dd>
+
+        <dt>{% trans "Email" %}</dt>
+        <dd>{{ library.email|default:"-" }}</dd>
+
+        <dt>{% trans "Site web" %}</dt>
+        <dd>{% if library.website %}<a href="{{ library.website }}" target="_blank">{{ library.website }}</a>{% else %}-{% endif %}</dd>
+
+        <dt>{% trans "Date de création" %}</dt>
+        <dd>{{ library.created_at|date:"d/m/Y H:i" }}</dd>
+    </dl>
+</section>
+
+<section>
+    <h2>{% trans "Personnel" %}</h2>
+    {% if staff_users %}
+    <ul>
+        {% for staff in staff_users %}
+        <li>{{ staff.get_full_name|default:staff.username }} ({{ staff.email }})</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>{% trans "Aucun personnel enregistré." %}</p>
+    {% endif %}
+</section>
+
+<section>
+    <h2>{% trans "Statistiques" %}</h2>
+    <dl>
+        <dt>{% trans "Nombre de lecteurs" %}</dt>
+        <dd>{{ reader_count }}</dd>
+    </dl>
+</section>
+
+<nav>
+    <a href="{% url 'accounts:library_update' library.pk %}">{% trans "Modifier" %}</a>
+    | <a href="{% url 'accounts:library_delete' library.pk %}">{% trans "Supprimer" %}</a>
+    | <a href="{% url 'accounts:library_list' %}">{% trans "Retour à la liste" %}</a>
+</nav>
+{% endblock %}

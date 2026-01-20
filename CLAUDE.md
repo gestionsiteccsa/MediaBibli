@@ -61,10 +61,42 @@ MediaBiB/
 │   └── templates/home/     # App-specific templates
 ├── templates/              # Global templates
 │   └── base.html           # Base template
+├── features/               # Plans des features (workflow)
+│   └── [nom-feature].md
 ├── skills/                 # Documentation technique
 │   └── [skill-name]/[skill-name].md
 └── manage.py
 ```
+
+## Workflow Feature
+
+**IMPORTANT** : Avant de coder une nouvelle feature, suivre obligatoirement ce workflow :
+
+### 1. Créer le plan de la feature
+Créer un fichier `features/(nom-feature).md` contenant :
+
+```markdown
+# Feature : [Nom de la feature]
+
+## Récapitulatif de la demande
+[Description claire de ce qui est demandé]
+
+## Tâches
+
+- [ ] Tâche 1 : [Description explicite]
+- [ ] Tâche 2 : [Description explicite]
+- [ ] ...
+- [ ] Tests : [Description des tests à écrire]
+```
+
+### 2. Règles de développement
+- **Découper les tâches** le plus explicitement possible pour un workflow fluide par étapes
+- **Inclure les tests** dans la liste des tâches
+- **Pas de CSS** : Ne jamais ajouter de CSS sauf demande explicite de l'utilisateur (un skill de design sera ajouté ultérieurement)
+
+### 3. Exécution
+- Travailler étape par étape en suivant le plan
+- Cocher les tâches au fur et à mesure dans le fichier `.md`
 
 ## Key Conventions
 
@@ -72,9 +104,9 @@ MediaBiB/
 - App templates are in `home/templates/home/` following Django's app template pattern
 - Global templates (like `base.html`) are in the root `templates/` directory
 - The `skills/` folder contains reference documentation for various technologies (Django, HTMX, React, etc.)
+- The `features/` folder contains feature plans and task lists
 
 ### Normes et conformité
 - **UNIMARC** : Format de catalogage bibliographique
 - **RGPD** : Protection des données personnelles des lecteurs
 - **WCAG 2.1 AA** : Accessibilité web
-

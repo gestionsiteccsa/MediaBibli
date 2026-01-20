@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Mon profil" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Mon profil" %}</h1>
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<section>
+    <h2>{% trans "Informations du compte" %}</h2>
+    <dl>
+        <dt>{% trans "Nom d'utilisateur" %}</dt>
+        <dd>{{ user.username }}</dd>
+
+        <dt>{% trans "Nom complet" %}</dt>
+        <dd>{{ user.get_full_name|default:"-" }}</dd>
+
+        <dt>{% trans "Email" %}</dt>
+        <dd>{{ user.email|default:"-" }}</dd>
+
+        <dt>{% trans "Type de compte" %}</dt>
+        <dd>{{ user.get_user_type_display }}</dd>
+
+        {% if user.library %}
+        <dt>{% trans "Médiathèque" %}</dt>
+        <dd>{{ user.library.name }}</dd>
+        {% endif %}
+    </dl>
+</section>
+
+{% if reader_profile %}
+<section>
+    <h2>{% trans "Informations lecteur" %}</h2>
+    <dl>
+        <dt>{% trans "Numéro de carte" %}</dt>
+        <dd>{{ reader_profile.card_number }}</dd>
+
+        <dt>{% trans "Catégorie" %}</dt>
+        <dd>{{ reader_profile.get_category_display }}</dd>
+
+        <dt>{% trans "Adresse" %}</dt>
+        <dd>{{ reader_profile.full_address|default:"-" }}</dd>
+
+        <dt>{% trans "Téléphone" %}</dt>
+        <dd>{{ reader_profile.phone|default:"-" }}</dd>
+
+        <dt>{% trans "Date d'expiration de la carte" %}</dt>
+        <dd>{{ reader_profile.card_expiry_date|default:"-" }}</dd>
+    </dl>
+</section>
+{% endif %}
+
+<nav>
+    <a href="{% url 'accounts:profile_edit' %}">{% trans "Modifier mon profil" %}</a>
+    {% if user.is_superadmin %}
+    | <a href="{% url 'accounts:library_list' %}">{% trans "Gérer les médiathèques" %}</a>
+    {% endif %}
+    {% if user.is_library_staff or user.is_superadmin %}
+    | <a href="{% url 'accounts:reader_list' %}">{% trans "Gérer les lecteurs" %}</a>
+    {% endif %}
+    | <a href="{% url 'accounts:logout' %}">{% trans "Se déconnecter" %}</a>
+</nav>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Supprimer lecteur" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Supprimer le lecteur" %}</h1>
+
+<p>{% blocktrans with name=reader.user.get_full_name card=reader.card_number %}Êtes-vous sûr de vouloir supprimer le lecteur "{{ name }}" (carte: {{ card }}) ?{% endblocktrans %}</p>
+
+<p><strong>{% trans "Attention" %}</strong>: {% trans "Cette action est irréversible. Le compte utilisateur associé sera également supprimé." %}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">{% trans "Confirmer la suppression" %}</button>
+    <a href="{% url 'accounts:reader_detail' reader.pk %}">{% trans "Annuler" %}</a>
+</form>
+{% endblock %}

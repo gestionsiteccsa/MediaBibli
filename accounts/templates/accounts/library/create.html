@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Créer une médiathèque" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Créer une médiathèque" %}</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>{% trans "Informations de la médiathèque" %}</legend>
+
+        {% for field in library_form %}
+        <div>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+            {% if field.errors %}<span>{{ field.errors.0 }}</span>{% endif %}
+        </div>
+        {% endfor %}
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Compte administrateur de la médiathèque" %}</legend>
+
+        {% for field in user_form %}
+        <div>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+            {% if field.errors %}<span>{{ field.errors.0 }}</span>{% endif %}
+        </div>
+        {% endfor %}
+    </fieldset>
+
+    <div>
+        <button type="submit">{% trans "Créer" %}</button>
+        <a href="{% url 'accounts:library_list' %}">{% trans "Annuler" %}</a>
+    </div>
+</form>
+{% endblock %}

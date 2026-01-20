@@ -1,0 +1,95 @@
+# Pre-commit hooks configuration
+# See https://pre-commit.com for more information
+# Install with: pip install pre-commit && pre-commit install
+
+# Global exclusions (matching .gitignore)
+exclude: |
+  (?x)^(
+    env/|
+    venv/|
+    \.venv/|
+    __pycache__/|
+    \.git/|
+    \.idea/|
+    \.vscode/|
+    \.claude/|
+    migrations/|
+    staticfiles/|
+    media/|
+    htmlcov/|
+    \.pytest_cache/|
+    .*\.pyc$|
+    .*\.pyo$|
+    .*\.log$|
+    db\.sqlite3$
+  )
+
+repos:
+  # General checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: check-docstring-first
+
+  # Python code formatting with Black
+  - repo: https://github.com/psf/black
+    rev: 24.1.1
+    hooks:
+      - id: black
+        args: ['--line-length=88']
+
+  # Import sorting with isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ['--profile=black', '--line-length=88']
+
+  # Linting with flake8
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-bugbear
+        args: ['--config=setup.cfg']
+
+  # Static type checking with mypy (optional but recommended)
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - django-stubs
+          - djangorestframework-stubs
+        args: ['--ignore-missing-imports']
+        pass_filenames: false
+
+  # Security checks with bandit
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.7
+    hooks:
+      - id: bandit
+        args: ['-r', '-ll', '--skip=B101']
+        files: ^(?!tests/).*\.py$
+
+  # Django-specific checks
+  - repo: local
+    hooks:
+      - id: django-check
+        name: Django system check
+        entry: python manage.py check
+        language: system
+        types: [python]
+        pass_filenames: false
+
+# Configuration for CI/CD compatibility
+ci:
+  autofix_prs: true
+  autoupdate_schedule: weekly

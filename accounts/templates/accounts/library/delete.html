@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Supprimer" %} {{ library.name }} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Supprimer la médiathèque" %}</h1>
+
+<p>{% blocktrans with name=library.name %}Êtes-vous sûr de vouloir supprimer la médiathèque "{{ name }}" ?{% endblocktrans %}</p>
+
+<p><strong>{% trans "Attention" %}</strong>: {% trans "Cette action supprimera également tous les utilisateurs et lecteurs associés à cette médiathèque." %}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">{% trans "Confirmer la suppression" %}</button>
+    <a href="{% url 'accounts:library_detail' library.pk %}">{% trans "Annuler" %}</a>
+</form>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Inscription" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Créer un compte lecteur" %}</h1>
+
+<p>{% trans "Inscrivez-vous pour accéder aux services de votre médiathèque." %}</p>
+
+{% if form.non_field_errors %}
+<div role="alert">
+    {% for error in form.non_field_errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>{% trans "Médiathèque" %}</legend>
+        <div>
+            <label for="{{ form.library.id_for_label }}">{{ form.library.label }} *</label>
+            {{ form.library }}
+            {% if form.library.help_text %}<small>{{ form.library.help_text }}</small>{% endif %}
+            {% if form.library.errors %}<span>{{ form.library.errors.0 }}</span>{% endif %}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Informations de connexion" %}</legend>
+
+        <div>
+            <label for="{{ form.username.id_for_label }}">{{ form.username.label }} *</label>
+            {{ form.username }}
+            {% if form.username.help_text %}<small>{{ form.username.help_text }}</small>{% endif %}
+            {% if form.username.errors %}<span>{{ form.username.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }} *</label>
+            {{ form.email }}
+            {% if form.email.help_text %}<small>{{ form.email.help_text }}</small>{% endif %}
+            {% if form.email.errors %}<span>{{ form.email.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }} *</label>
+            {{ form.password1 }}
+            {% if form.password1.help_text %}<small>{{ form.password1.help_text }}</small>{% endif %}
+            {% if form.password1.errors %}<span>{{ form.password1.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }} *</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}<span>{{ form.password2.errors.0 }}</span>{% endif %}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Informations personnelles" %}</legend>
+
+        <div>
+            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }} *</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}<span>{{ form.first_name.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }} *</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}<span>{{ form.last_name.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.birth_date.id_for_label }}">{{ form.birth_date.label }}</label>
+            {{ form.birth_date }}
+            {% if form.birth_date.errors %}<span>{{ form.birth_date.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<span>{{ form.phone.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+            {{ form.category }}
+            {% if form.category.errors %}<span>{{ form.category.errors.0 }}</span>{% endif %}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Adresse" %}</legend>
+
+        <div>
+            <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+            {{ form.address }}
+            {% if form.address.errors %}<span>{{ form.address.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.postal_code.id_for_label }}">{{ form.postal_code.label }}</label>
+            {{ form.postal_code }}
+            {% if form.postal_code.errors %}<span>{{ form.postal_code.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+            {{ form.city }}
+            {% if form.city.errors %}<span>{{ form.city.errors.0 }}</span>{% endif %}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Consentements" %}</legend>
+
+        <div>
+            <label>
+                {{ form.gdpr_consent }}
+                {{ form.gdpr_consent.label }} *
+            </label>
+            {% if form.gdpr_consent.help_text %}<small>{{ form.gdpr_consent.help_text }}</small>{% endif %}
+            {% if form.gdpr_consent.errors %}<span>{{ form.gdpr_consent.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label>
+                {{ form.newsletter_consent }}
+                {{ form.newsletter_consent.label }}
+            </label>
+        </div>
+    </fieldset>
+
+    <div>
+        <button type="submit">{% trans "Créer mon compte" %}</button>
+    </div>
+</form>
+
+<p>{% trans "Déjà inscrit ?" %} <a href="{% url 'accounts:login' %}">{% trans "Se connecter" %}</a></p>
+{% endblock %}

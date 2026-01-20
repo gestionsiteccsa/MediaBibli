@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Connexion" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Connexion à MediaBiB" %}</h1>
+
+{% if form.errors %}
+<div role="alert">
+    <p>{% trans "Identifiant ou mot de passe incorrect." %}</p>
+</div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+
+    <div>
+        <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+        <span>{{ form.username.errors.0 }}</span>
+        {% endif %}
+    </div>
+
+    <div>
+        <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        {{ form.password }}
+        {% if form.password.errors %}
+        <span>{{ form.password.errors.0 }}</span>
+        {% endif %}
+    </div>
+
+    <div>
+        <button type="submit">{% trans "Se connecter" %}</button>
+    </div>
+</form>
+
+<p>{% trans "Pas encore de compte ?" %} <a href="{% url 'accounts:register' %}">{% trans "S'inscrire" %}</a></p>
+
+<p><a href="{% url 'home:index' %}">{% trans "Retour à l'accueil" %}</a></p>
+{% endblock %}

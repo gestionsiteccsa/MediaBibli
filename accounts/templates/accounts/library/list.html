@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Médiathèques" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Gestion des médiathèques" %}</h1>
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<nav>
+    <a href="{% url 'accounts:library_create' %}">{% trans "Créer une médiathèque" %}</a>
+    | <a href="{% url 'accounts:profile' %}">{% trans "Mon profil" %}</a>
+</nav>
+
+{% if libraries %}
+<table>
+    <thead>
+        <tr>
+            <th>{% trans "Code" %}</th>
+            <th>{% trans "Nom" %}</th>
+            <th>{% trans "Ville" %}</th>
+            <th>{% trans "Statut" %}</th>
+            <th>{% trans "Actions" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for library in libraries %}
+        <tr>
+            <td>{{ library.code }}</td>
+            <td><a href="{% url 'accounts:library_detail' library.pk %}">{{ library.name }}</a></td>
+            <td>{{ library.city|default:"-" }}</td>
+            <td>{% if library.is_active %}{% trans "Active" %}{% else %}{% trans "Inactive" %}{% endif %}</td>
+            <td>
+                <a href="{% url 'accounts:library_update' library.pk %}">{% trans "Modifier" %}</a>
+                | <a href="{% url 'accounts:library_delete' library.pk %}">{% trans "Supprimer" %}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}">{% trans "Précédent" %}</a>
+    {% endif %}
+    <span>{% trans "Page" %} {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">{% trans "Suivant" %}</a>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p>{% trans "Aucune médiathèque enregistrée." %}</p>
+{% endif %}
+{% endblock %}

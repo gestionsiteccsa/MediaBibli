@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Modifier lecteur" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Modifier le lecteur" %}: {{ reader.card_number }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>{% trans "Informations utilisateur" %}</legend>
+
+        <div>
+            <label for="id_first_name">{% trans "Prénom" %}</label>
+            <input type="text" name="first_name" id="id_first_name" value="{{ form.first_name.value|default:'' }}" required>
+            {% if form.first_name.errors %}<span>{{ form.first_name.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="id_last_name">{% trans "Nom" %}</label>
+            <input type="text" name="last_name" id="id_last_name" value="{{ form.last_name.value|default:'' }}" required>
+            {% if form.last_name.errors %}<span>{{ form.last_name.errors.0 }}</span>{% endif %}
+        </div>
+
+        <div>
+            <label for="id_email">{% trans "Email" %}</label>
+            <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}">
+            {% if form.email.errors %}<span>{{ form.email.errors.0 }}</span>{% endif %}
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{% trans "Informations lecteur" %}</legend>
+
+        {% for field in form %}
+            {% if field.name not in 'email,first_name,last_name' %}
+            <div>
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {% if field.errors %}<span>{{ field.errors.0 }}</span>{% endif %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+
+    <div>
+        <button type="submit">{% trans "Enregistrer" %}</button>
+        <a href="{% url 'accounts:reader_detail' reader.pk %}">{% trans "Annuler" %}</a>
+    </div>
+</form>
+{% endblock %}

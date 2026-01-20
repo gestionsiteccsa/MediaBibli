@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Lecteur créé" %} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Lecteur créé avec succès" %}</h1>
+
+<section>
+    <h2>{% trans "Informations du compte" %}</h2>
+    <dl>
+        <dt>{% trans "Nom" %}</dt>
+        <dd>{{ reader.user.get_full_name }}</dd>
+
+        <dt>{% trans "Numéro de carte" %}</dt>
+        <dd><strong>{{ reader.card_number }}</strong></dd>
+
+        <dt>{% trans "Nom d'utilisateur" %}</dt>
+        <dd><strong>{{ reader.user.username }}</strong></dd>
+
+        <dt>{% trans "Mot de passe" %}</dt>
+        <dd><strong>{{ password }}</strong></dd>
+    </dl>
+</section>
+
+<div role="alert">
+    <p><strong>{% trans "Important" %}</strong>: {% trans "Notez ou communiquez ces informations au lecteur. Le mot de passe ne sera plus visible après avoir quitté cette page." %}</p>
+</div>
+
+<nav>
+    <a href="{% url 'accounts:reader_detail' reader.pk %}">{% trans "Voir la fiche lecteur" %}</a>
+    | <a href="{% url 'accounts:reader_create' %}">{% trans "Créer un autre lecteur" %}</a>
+    | <a href="{% url 'accounts:reader_list' %}">{% trans "Retour à la liste" %}</a>
+</nav>
+{% endblock %}

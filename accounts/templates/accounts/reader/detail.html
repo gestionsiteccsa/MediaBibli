@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{{ reader.card_number }} - MediaBiB{% endblock %}
+
+{% block content %}
+<h1>{% trans "Fiche lecteur" %}: {{ reader.user.get_full_name|default:reader.user.username }}</h1>
+
+{% if messages %}
+<div>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if reader.is_blocked %}
+<div role="alert">
+    <p><strong>{% trans "Ce lecteur est bloqué" %}</strong></p>
+    {% if reader.blocked_reason %}<p>{% trans "Raison" %}: {{ reader.blocked_reason }}</p>{% endif %}
+</div>
+{% endif %}
+
+<section>
+    <h2>{% trans "Informations de la carte" %}</h2>
+    <dl>
+        <dt>{% trans "Numéro de carte" %}</dt>
+        <dd>{{ reader.card_number }}</dd>
+
+        <dt>{% trans "Date d'émission" %}</dt>
+        <dd>{{ reader.card_issued_date|date:"d/m/Y" }}</dd>
+
+        <dt>{% trans "Date d'expiration" %}</dt>
+        <dd>{{ reader.card_expiry_date|date:"d/m/Y"|default:"-" }}</dd>
+
+        <dt>{% trans "Catégorie" %}</dt>
+        <dd>{{ reader.get_category_display }}</dd>
+
+        <dt>{% trans "Statut" %}</dt>
+        <dd>{% if reader.is_blocked %}{% trans "Bloqué" %}{% elif not reader.is_active %}{% trans "Inactif" %}{% else %}{% trans "Actif" %}{% endif %}</dd>
+    </dl>
+</section>
+
+<section>
+    <h2>{% trans "Compte utilisateur" %}</h2>
+    <dl>
+        <dt>{% trans "Nom d'utilisateur" %}</dt>
+        <dd>{{ reader.user.username }}</dd>
+
+        <dt>{% trans "Nom complet" %}</dt>
+        <dd>{{ reader.user.get_full_name|default:"-" }}</dd>
+
+        <dt>{% trans "Email" %}</dt>
+        <dd>{{ reader.user.email|default:"-" }}</dd>
+
+        <dt>{% trans "Médiathèque" %}</dt>
+        <dd>{{ reader.user.library.name|default:"-" }}</dd>
+    </dl>
+</section>
+
+<section>
+    <h2>{% trans "Informations personnelles" %}</h2>
+    <dl>
+        <dt>{% trans "Date de naissance" %}</dt>
+        <dd>{{ reader.birth_date|date:"d/m/Y"|default:"-" }}</dd>
+
+        <dt>{% trans "Adresse" %}</dt>
+        <dd>{{ reader.full_address|default:"-" }}</dd>
+
+        <dt>{% trans "Téléphone" %}</dt>
+        <dd>{{ reader.phone|default:"-" }}</dd>
+    </dl>
+</section>
+
+<section>
+    <h2>{% trans "RGPD" %}</h2>
+    <dl>
+        <dt>{% trans "Consentement RGPD" %}</dt>
+        <dd>{% if reader.gdpr_consent %}{% trans "Oui" %} ({{ reader.gdpr_consent_date|date:"d/m/Y H:i" }}){% else %}{% trans "Non" %}{% endif %}</dd>
+
+        <dt>{% trans "Consentement newsletter" %}</dt>
+        <dd>{% if reader.newsletter_consent %}{% trans "Oui" %}{% else %}{% trans "Non" %}{% endif %}</dd>
+    </dl>
+</section>
+
+{% if reader.internal_notes %}
+<section>
+    <h2>{% trans "Notes internes" %}</h2>
+    <p>{{ reader.internal_notes|linebreaks }}</p>
+</section>
+{% endif %}
+
+<section>
+    <h2>{% trans "Audit" %}</h2>
+    <dl>
+        <dt>{% trans "Date de création" %}</dt>
+        <dd>{{ reader.created_at|date:"d/m/Y H:i" }}</dd>
+
+        <dt>{% trans "Dernière modification" %}</dt>
+        <dd>{{ reader.updated_at|date:"d/m/Y H:i" }}</dd>
+    </dl>
+</section>
+
+<nav>
+    <a href="{% url 'accounts:reader_update' reader.pk %}">{% trans "Modifier" %}</a>
+    | <a href="{% url 'accounts:reader_password_reset' reader.pk %}">{% trans "Réinitialiser le mot de passe" %}</a>
+    | <a href="{% url 'accounts:reader_delete' reader.pk %}">{% trans "Supprimer" %}</a>
+    | <a href="{% url 'accounts:reader_list' %}">{% trans "Retour à la liste" %}</a>
+</nav>
+{% endblock %}

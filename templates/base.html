@@ -6,6 +6,20 @@
     <title>{% block title %}MediaBiB{% endblock %}</title>
 </head>
 <body>
+    <header>
+        <h1>MediaBiB</h1>
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="">Mon profil</a></li>
+                    <li><a href="">Se déconnecter</a></li>
+                {% else %}
+                    <li><a href="{% url 'accounts:login' %}">Se connecter</a></li>
+                    <li><a href="">S'inscrire</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
     {% block content %}{% endblock %}
 </body>
 </html>
